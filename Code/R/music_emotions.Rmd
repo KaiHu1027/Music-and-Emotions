@@ -3,26 +3,63 @@ title: "music_emotions"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Load Packages
+```{r}
+
+#install.packages("janitor")
+#install.packages("tidyverse")
+library("janitor")
+library("tidyverse")
 ```
 
-## R Markdown
+# DATA
+## Read in Data 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+df.exp1 = read_csv("../../Data/exp1.csv")
 ```
 
-## Including Plots
+## Wrangle data
 
-You can also embed plots, for example:
+```{r}
+df.exp1 = df.exp1 %>% 
+  select(-c(`Consent Form:                                                       DESCRIPTION: You are invited to participate in a research study on how different genres and tempos of music affect teenager’s emotions. Hopefully, based on the data, we can see what type of music at what tempo has the most positive/negative impact on teenager’s moods. You will be asked to listen to 15 20-to-30-seconds-long recordings of different music at different tempos and rate your mood after listening to each one.                                                                              TIME INVOLVEMENT: Your participation will take approximately 8-10 mins to finish the survey           RISKS AND BENEFITS: The risks associated with this study are none. Study data will be stored securely, minimizing the risk of confidentiality breach. We cannot and do not guarantee or promise that you will receive any benefits from this study. Your decision of whether or not to participate in this study will not affect your grades in school.                                               PARTICIPANT’S RIGHTS: If you have read this form and have decided to participate in this project, please understand your participation is voluntary and you have the right to withdraw your consent or discontinue participation at any time without penalty or loss of benefits to which you are otherwise entitled. The alternative is not to participate. You have the right to refuse to answer particular questions. The results of this research study may be presented at scientific or professional meetings or published in scientific journals. Your individual privacy will be maintained in all published and written data resulting from the study.`, Timestamp, Score)) %>% 
+  clean_names() 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+df.exp1 = df.exp1 %>% 
+  mutate(rename(., "po" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_po),
+         rename(., "ps" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_ps),
+         rename(., "pf" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_pf),
+         rename(., "ro" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_ro),
+         rename(., "rs" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_rs),
+         rename(., "rf" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_rf),
+         rename(., "rbo" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_rbo),
+         rename(., "rbs" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_rbs),
+         rename(., "rbf" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_rbf),
+         rename(., "ho" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_ho),
+         rename(., "hs" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_hs),
+         rename(., "hf" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_hf),
+         rename(., "co" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_co),
+         rename(., "cs" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_cs),
+         rename(., "cf" = please_click_the_link_below_to_listen_to_your_audio_whats_your_mood_after_listening_to_the_audio_from_a_scale_of_1_10_cf))
+
+df.exp1 = df.exp1 %>% 
+  mutate(rename(., "current_mood" = what_is_your_current_mood_from_a_scale_of_1_10)) %>% 
+  select(po:current_mood)
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+##To do 
+
+```{r}
+
+##repeat for all variables
+df.exp1 = df.exp1 %>% 
+  mutate(po = str_extract(po, "[:digit:]"),
+         ps = str_extract(ps, "[:digit:]"),
+         pf = str_extract(pf, "[:digit:]"))
+
+```
+
