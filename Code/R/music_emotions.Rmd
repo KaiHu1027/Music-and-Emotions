@@ -4,6 +4,7 @@ output: html_document
 ---
 
 # Load Packages
+
 ```{r}
 
 #install.packages("janitor")
@@ -13,7 +14,8 @@ library("tidyverse")
 ```
 
 # DATA
-## Read in Data 
+
+## Read in Data
 
 ```{r}
 df.exp1 = read_csv("../../Data/exp1.csv")
@@ -51,7 +53,7 @@ df.exp1 = df.exp1 %>%
 
 ```
 
-##To do 
+##To do
 
 ```{r}
 
@@ -59,7 +61,18 @@ df.exp1 = df.exp1 %>%
 df.exp1 = df.exp1 %>% 
   mutate(po = str_extract(po, "[:digit:]"),
          ps = str_extract(ps, "[:digit:]"),
-         pf = str_extract(pf, "[:digit:]"))
+         pf = str_extract(pf, "[:digit:]"),
+         ro = str_extract(po, "[:digit:]"),
+         rs = str_extract(po, "[:digit:]"),
+         rf = str_extract(po, "[:digit:]"),
+         rbo = str_extract(po, "[:digit:]"),
+         rbs = str_extract(po, "[:digit:]"),
+         rbf = str_extract(po, "[:digit:]"),
+         ho = str_extract(po, "[:digit:]"),
+         hs = str_extract(po, "[:digit:]"),
+         hf = str_extract(po, "[:digit:]"),
+         co = str_extract(po, "[:digit:]"),
+         cs = str_extract(po, "[:digit:]"),
+         cf = str_extract(po, "[:digit:]"))
 
 ```
-
