@@ -6,9 +6,7 @@ output: html_document
 # Load Packages
 
 ```{r}
-
-#install.packages("janitor")
-#install.packages("tidyverse")
+library("corrplot")
 library("janitor")
 library("tidyverse")
 ```
@@ -73,6 +71,112 @@ df.exp1 = df.exp1 %>%
          hf = str_extract(hf, "[:digit:]"),
          co = str_extract(co, "[:digit:]"),
          cs = str_extract(cs, "[:digit:]"),
-         cf = str_extract(cf, "[:digit:]"))
+         cf = str_extract(cf, "[:digit:]"),
+         current_mood = str_extract(current_mood, "[:digit:]"))
 
+```
+
+```{r}
+
+df.exp1 = df.exp1 %>% 
+  mutate(participant = rep(1:12)) %>% 
+  relocate(participant) 
+
+df.exp1.long = df.exp1 %>% 
+  pivot_longer(cols = -participant,
+               names_to = "music",
+               values_to = "response")
+
+df.exp1.long = df.exp1.long %>% 
+  filter(music != "current_mood") %>% 
+  mutate(genre = rep(c("pop", "rock", "rnb", "hiphop", "classical"), each = 3, times = 12),
+         tempo = rep(c("original", "slow", "fast"), time = 60)) %>% 
+  select(-music)
+
+```
+
+```{r}
+
+ggplot(data = df.exp1.long,
+       aes(x = genre,
+           y = response,
+           group = tempo,
+           color = tempo,
+           fill = tempo)) + 
+  geom_point() + 
+  stat_summary(fun.data = "mean_cl_boot",
+               shape = 21,
+               size = 1,
+               position = position_dodge(width = .5)) +
+  scale_color_brewer("Set1") +
+  scale_fill_brewer("Set1")
+
+ggsave("../../figures/genre_tempo_plot.pdf",
+       height = 3,
+       width = 5)
+
+```
+
+
+```{r}
+
+ggplot(data = df.exp1.long,
+       aes(x = genre,
+           y = response,
+           group = genre,
+           color = genre,
+           fill = genre)) + 
+  geom_point() + 
+  stat_summary(fun.data = "mean_cl_boot",
+               shape = 21,
+               size = 1,
+               position = position_dodge(width = .5)) +
+  scale_color_brewer("Set1") +
+  scale_fill_brewer("Set1")
+
+ggsave("../../figures/genre_plot.pdf",
+       height = 3,
+       width = 5)
+
+```
+
+
+
+```{r}
+
+ggplot(data = df.exp1.long,
+       aes(x = tempo,
+           y = response,
+           group = tempo,
+           color = tempo,
+           fill = tempo)) +
+  geom_point() + 
+  stat_summary(fun.data = "mean_cl_boot",
+               shape = 21,
+               size = 1,
+               position = position_dodge(width = .5)) +
+  scale_color_brewer("Set1") +
+  scale_fill_brewer("Set1")
+
+ggsave("../../figures/tempo_plot.pdf",
+       height = 3,
+       width = 5)
+
+```
+
+
+```{r}
+
+cor = df.exp1 %>% 
+  select(-participant) %>% 
+  mutate(across(everything(), .fns = as.numeric)) %>% 
+  cor(.)
+```
+
+```{r}
+corrplot(cor, type = "upper")
+
+ggsave("../../figures/correlation_plot.pdf",
+       height = 3,
+       width = 5)
 ```
