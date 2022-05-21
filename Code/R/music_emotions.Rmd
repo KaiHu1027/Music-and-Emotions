@@ -95,6 +95,8 @@ df.exp1.long = df.exp1.long %>%
 
 ```
 
+#PLOTS
+## Genre and Tempo 
 ```{r}
 
 ggplot(data = df.exp1.long,
@@ -103,13 +105,16 @@ ggplot(data = df.exp1.long,
            group = tempo,
            color = tempo,
            fill = tempo)) + 
-  geom_point() + 
+  geom_point(position = position_jitter(width = .15,
+                                        height = .05)) + 
   stat_summary(fun.data = "mean_cl_boot",
                shape = 21,
                size = 1,
-               position = position_dodge(width = .5)) +
-  scale_color_brewer("Set1") +
-  scale_fill_brewer("Set1")
+               position = position_dodge(width = .8),
+               color = "black") +
+  scale_color_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1") +
+  theme_classic()
 
 ggsave("../../figures/genre_tempo_plot.pdf",
        height = 3,
@@ -117,7 +122,7 @@ ggsave("../../figures/genre_tempo_plot.pdf",
 
 ```
 
-
+## Genre
 ```{r}
 
 ggplot(data = df.exp1.long,
@@ -126,13 +131,17 @@ ggplot(data = df.exp1.long,
            group = genre,
            color = genre,
            fill = genre)) + 
-  geom_point() + 
+  geom_point(position = position_jitter(width = .15,
+                                        height = .05)) + 
   stat_summary(fun.data = "mean_cl_boot",
                shape = 21,
                size = 1,
-               position = position_dodge(width = .5)) +
-  scale_color_brewer("Set1") +
-  scale_fill_brewer("Set1")
+               position = position_dodge(width = .5),
+               color = "black") +
+  scale_color_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1") +
+  theme_classic() +
+  theme(legend.position = "none") 
 
 ggsave("../../figures/genre_plot.pdf",
        height = 3,
@@ -140,7 +149,7 @@ ggsave("../../figures/genre_plot.pdf",
 
 ```
 
-
+## Tempo
 
 ```{r}
 
@@ -150,13 +159,19 @@ ggplot(data = df.exp1.long,
            group = tempo,
            color = tempo,
            fill = tempo)) +
-  geom_point() + 
+  geom_point(position = position_jitter(width = .07,
+                                        height = .05)) + 
   stat_summary(fun.data = "mean_cl_boot",
                shape = 21,
                size = 1,
-               position = position_dodge(width = .5)) +
-  scale_color_brewer("Set1") +
-  scale_fill_brewer("Set1")
+               position = position_dodge(width = .5),
+               color = "black") +
+  scale_color_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1") +
+  theme_classic() +
+  theme(legend.position = "none") 
+
+
 
 ggsave("../../figures/tempo_plot.pdf",
        height = 3,
@@ -174,9 +189,11 @@ cor = df.exp1 %>%
 ```
 
 ```{r}
+
+pdf(file = "../../figures/correlation_plot.pdf")
+
 corrplot(cor, type = "upper")
 
-ggsave("../../figures/correlation_plot.pdf",
-       height = 3,
-       width = 5)
+dev.off()
+
 ```
